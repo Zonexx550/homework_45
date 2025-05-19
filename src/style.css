@@ -60,6 +60,7 @@ form {
   width: 100%;
   height: 250px;
   object-fit: cover;
+  cursor: pointer;
 }
 
 .info {
@@ -73,4 +74,31 @@ form {
 .info-block {
   display: flex;
   flex-direction: column;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-close {
+  position: fixed;
+  top: 20px;
+  right: 40px;
+  font-size: 40px;
+  color: white;
+  cursor: pointer;
+  user-select: none;
 }
