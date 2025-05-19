@@ -7,6 +7,10 @@ const input = document.querySelector("#search-input");
 const gallery = document.querySelector("#gallery");
 const loadMoreBtn = document.querySelector("#loadmore-btn");
 
+const modal = document.querySelector("#modal");
+const modalImage = document.querySelector("#modal-image");
+const modalClose = document.querySelector("#modal-close");
+
 const API_KEY = "50255605-43c5fe21985c67b1fcb87f4a7";
 let page = 1;
 let query = "";
@@ -30,7 +34,7 @@ loadMoreBtn.addEventListener("click", fetchImages);
 async function fetchImages() {
   const url = `https://pixabay.com/api/?key=${API_KEY}&q=${encodeURIComponent(
     query
-  )}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=12`;
+  )}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=15`;
 
   try {
     const res = await fetch(url);
@@ -56,9 +60,17 @@ async function fetchImages() {
 function renderImages(images) {
   const markup = images
     .map(
-      ({ webformatURL, tags, likes, views, comments, downloads }) => `
-        <li class="gallery-item">
-          <img src="${webformatURL}" alt="${tags}" class="gallery-image" />
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => `
+    <li class="gallery-item">
+      <img src="${webformatURL}" data-large="${largeImageURL}" alt="${tags}" class="gallery-image" />
           <div class="info">
             ${renderInfo("Likes", likes)}
             ${renderInfo("Views", views)}
@@ -86,3 +98,24 @@ function showToast(type, title, message) {
     message,
   });
 }
+
+gallery.addEventListener("click", (e) => {
+  const target = e.target;
+  if (target.classList.contains("gallery-image")) {
+    modalImage.src = target.dataset.large || target.src;
+    modalImage.alt = target.alt;
+    modal.classList.remove("hidden");
+  }
+});
+
+modalClose.addEventListener("click", () => {
+  modal.classList.add("hidden");
+  modalImage.src = "";
+});
+
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    modal.classList.add("hidden");
+    modalImage.src = "";
+  }
+});
